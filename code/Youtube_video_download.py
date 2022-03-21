@@ -8,9 +8,8 @@ from telegram.ext import (
     ConversationHandler,
     CallbackContext,
 )
-LINK = range(4)
+LINK = range(1)
 def start(update: Update, context: CallbackContext):
-        print(update.message.chat_id)
         update.message.reply_text(
                 f"Hello {update.message.from_user.first_name}, Welcome to the Bot.Please write\n/help for list")
 def help(update: Update, context: CallbackContext):
@@ -26,10 +25,7 @@ def ytd(update: Update, context: CallbackContext) -> int:
     return LINK
 
 def link(update: Update, context: CallbackContext) -> int:
-     user = update.message.from_user
-     print(f"video link by {user.username} is {update.message.text}")
      link=update.message.text
-     print("test 1")
      yt = YouTube(link)
      update.message.reply_text(f"Downloding {yt.title}")
      try:
@@ -37,14 +33,12 @@ def link(update: Update, context: CallbackContext) -> int:
         update.message.reply_text(f"Downloded {yt.title}")
         update.message.reply_video(video=open(f'{yt.streams.get_by_itag(22).default_filename}', 'rb'))
      except:
-         print("test 3")
-         update.message.reply_text(f"{user.first_name} , sorry but there are some error cheek after some time  ")
+         update.message.reply_text(f"Sorry but there are some error cheek after some time  ")
      return ConversationHandler.END
 
 
 def cancel(update: Update, context: CallbackContext) -> int:
     user = update.message.from_user
-    print("User %s canceled the conversation.", user.first_name)
     update.message.reply_text(
         'Bye!', reply_markup=ReplyKeyboardRemove()
     )
